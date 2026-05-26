@@ -45,7 +45,7 @@ Description includes:
 - **Severity**: high
 - **Finding**: description
 - **Files**: affected files
-- **Status**: Backlog
+- **Status**: to do
 
 Set tags: `agent-detected`, `{type}`
 
@@ -68,3 +68,5 @@ Set tags: `agent-detected`, `{type}`
 ```
 
 If no tasks were created (all findings were duplicates), return empty plan with status `"no_new_tasks"`.
+
+

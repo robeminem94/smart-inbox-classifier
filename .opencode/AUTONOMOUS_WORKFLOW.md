@@ -80,7 +80,7 @@ Description includes:
 - PR URL (after creation)
 - verification results
 
-Statuses: Backlog → Planned → Building → Verifying → In Review → Done
+Statuses: to do -> in progress -> complete
 
 Tags: agent-detected, bug, refactor, test, docs, security, performance
 
@@ -94,3 +94,15 @@ Tags: agent-detected, bug, refactor, test, docs, security, performance
 - Never expose secrets in logs, comments, commits, or PRs.
 - If a verification step is unavailable (no test script), report it and proceed.
 - If build fails, report the failure back to fix-builder. Max 3 retry cycles.
+
+
+## ClickUp Status Mapping
+
+The workspace currently has 3 statuses: to do, in progress, complete.
+- New tasks use status 'to do'
+- PR created / fix applied use status 'in progress'
+- Done / merged use status 'complete'
+
+If you want custom statuses (Backlog, Planned, Building, Verifying, In Review, Done),
+add them manually in ClickUp: open the list, click ..., Statuses, Add Status.
+

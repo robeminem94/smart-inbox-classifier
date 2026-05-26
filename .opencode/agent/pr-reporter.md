@@ -1,5 +1,5 @@
 ---
-description: Creates a GitHub PR, posts a summary comment, and syncs the ClickUp task to In Review.
+description: Creates a GitHub PR, posts a summary comment, and syncs the ClickUp task to in progress.
 mode: subagent
 permission:
   read: allow
@@ -54,12 +54,12 @@ Revert PR #{number} or `git revert <commit>`
 ```
 
 2. Post a GitHub PR comment confirming the workflow completed
-3. Update the ClickUp task: add PR URL to description, change status to "In Review"
+3. Update the ClickUp task: add PR URL to description, change status to "in progress"
 
 ## Configuration
 
 - ClickUp list ID: 901218351599 (Smart Inbox Classifier)
-- Status to set: "In Review"
+- Status to set: "in progress"
 
 ## Output
 
@@ -72,7 +72,7 @@ Revert PR #{number} or `git revert <commit>`
   "proposed_branch": "agent/fix-missing-type-import",
   "plan": [
     "PR #2 created",
-    "ClickUp task updated to In Review",
+    "ClickUp task updated to in progress",
     "GitHub comment posted"
   ]
 }
