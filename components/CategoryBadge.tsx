@@ -12,7 +12,7 @@ const categoryStyles: Record<MessageCategory, string> = {
 
 export function CategoryBadge({ category }: { category: MessageCategory }) {
   return (
-    <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${categoryStyles[category]}`}>
+    <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${categoryStyles[category] ?? ""}`}>
       {category}
     </span>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { ResultCards } from "@/components/ResultCards";
 import { SOURCE_CHANNELS, type AiClassificationResult, type IncomingMessageInput, type SourceChannel } from "@/lib/types";
 
@@ -43,7 +43,7 @@ export function MessageForm() {
     return nextErrors;
   }
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const nextErrors = validateClientForm();
 

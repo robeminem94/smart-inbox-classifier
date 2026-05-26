@@ -2,34 +2,15 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { CopyButton } from "@/components/CopyButton";
 import { EmptyState } from "@/components/EmptyState";
 import { ResultCards } from "@/components/ResultCards";
 import { getSavedMessageById } from "@/lib/localStorage";
-import { type SavedMessage } from "@/lib/types";
 
 export default function MessageDetailPage() {
   const params = useParams<{ id: string }>();
-  const [message, setMessage] = useState<SavedMessage | null>(null);
-  const [hasLoaded, setHasLoaded] = useState(false);
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setMessage(getSavedMessageById(params.id) || null);
-      setHasLoaded(true);
-    }, 0);
-
-    return () => window.clearTimeout(timer);
-  }, [params.id]);
-
-  if (!hasLoaded) {
-    return (
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="h-96 animate-pulse rounded-[2rem] bg-slate-100" />
-      </div>
-    );
-  }
+  const message = useMemo(() => getSavedMessageById(params.id) || null, [params.id]);
 
   if (!message) {
     return (

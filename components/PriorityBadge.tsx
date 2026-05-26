@@ -9,7 +9,7 @@ const priorityStyles: Record<MessagePriority, string> = {
 
 export function PriorityBadge({ priority }: { priority: MessagePriority }) {
   return (
-    <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${priorityStyles[priority]}`}>
+    <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${priorityStyles[priority] ?? ""}`}>
       {priority}
     </span>
   );
