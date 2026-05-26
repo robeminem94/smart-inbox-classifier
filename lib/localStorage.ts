@@ -6,12 +6,15 @@ function isBrowser(): boolean {
   return typeof window !== "undefined";
 }
 
+let idCounter = 0;
+
 function createId(): string {
   if (isBrowser() && "crypto" in window && typeof window.crypto.randomUUID === "function") {
     return window.crypto.randomUUID();
   }
 
-  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  idCounter += 1;
+  return `${Date.now()}-${idCounter}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
 export function getSavedMessages(): SavedMessage[] {

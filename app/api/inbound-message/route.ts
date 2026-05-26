@@ -20,6 +20,7 @@ export async function POST(request: Request) {
 
   try {
     const result = await classifyMessage(validation.data);
+    console.info("[inbound-webhook] message classified successfully");
     return NextResponse.json(result);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to classify inbound message.";

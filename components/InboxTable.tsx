@@ -15,11 +15,7 @@ export function InboxTable() {
   const [priority, setPriority] = useState<MessagePriority | "All">("All");
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setMessages(getSavedMessages());
-    }, 0);
-
-    return () => window.clearTimeout(timer);
+    setMessages(getSavedMessages());
   }, []);
 
   function handleDelete(id: string) {

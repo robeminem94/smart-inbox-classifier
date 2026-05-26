@@ -15,12 +15,8 @@ export default function MessageDetailPage() {
   const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setMessage(getSavedMessageById(params.id) || null);
-      setHasLoaded(true);
-    }, 0);
-
-    return () => window.clearTimeout(timer);
+    setMessage(getSavedMessageById(params.id) || null);
+    setHasLoaded(true);
   }, [params.id]);
 
   if (!hasLoaded) {

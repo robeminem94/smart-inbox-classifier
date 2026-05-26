@@ -51,6 +51,8 @@ function extractJson(content: string): unknown {
   }
 }
 
+const FETCH_TIMEOUT_MS = 30_000;
+
 export async function classifyMessage(input: IncomingMessageInput): Promise<AiClassificationResult> {
   const apiKey = process.env.OPENAI_API_KEY;
 
@@ -58,7 +60,11 @@ export async function classifyMessage(input: IncomingMessageInput): Promise<AiCl
     throw new Error("OPENAI_API_KEY is not configured.");
   }
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
   const response = await fetch(OPENAI_API_URL, {
+    signal: controller.signal,
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -77,6 +83,8 @@ export async function classifyMessage(input: IncomingMessageInput): Promise<AiCl
       ],
     }),
   });
+
+  clearTimeout(timeout);
 
   if (!response.ok) {
     const details = await response.text();
