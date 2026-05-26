@@ -1,4 +1,5 @@
 import { type AiClassificationResult, type IncomingMessageInput, type SavedMessage } from "@/lib/types";
+import { isRecord } from "@/lib/validation";
 
 const STORAGE_KEY = "smart-inbox-classifier-messages";
 
@@ -17,6 +18,23 @@ function createId(): string {
   return `${Date.now()}-${idCounter}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
+function isSavedMessage(value: unknown): value is SavedMessage {
+  if (!isRecord(value)) return false;
+
+  const requiredStringFields = ["id", "createdAt", "senderName", "senderEmail", "subject", "body", "source"] as const;
+  for (const field of requiredStringFields) {
+    const fieldValue = value[field];
+    if (typeof fieldValue !== "string" || fieldValue.trim() === "") return false;
+  }
+
+  const analysis = value.analysis;
+  if (!isRecord(analysis)) return false;
+
+  if (typeof analysis.category !== "string" || analysis.category.trim() === "") return false;
+
+  return true;
+}
+
 export function getSavedMessages(): SavedMessage[] {
   if (!isBrowser()) return [];
 
@@ -25,7 +43,7 @@ export function getSavedMessages(): SavedMessage[] {
     if (!raw) return [];
     const parsed = JSON.parse(raw) as SavedMessage[];
     return Array.isArray(parsed)
-      ? parsed.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      ? parsed.filter(isSavedMessage).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       : [];
   } catch {
     return [];
