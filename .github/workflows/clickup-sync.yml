@@ -1,0 +1,48 @@
+name: Sync merged PR to ClickUp
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  update-clickup:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract ClickUp Task ID from PR body
+        id: extract
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          BODY=$(gh pr view $PR_NUMBER --repo $REPO --json body --jq '.body')
+          echo "PR body: $BODY"
+
+          # Pattern 1: ClickUp Task ID like 869dew2dw in PR body
+          TASK_ID=$(echo "$BODY" | grep -oP '869de[a-z0-9]+' | head -1)
+
+          # Pattern 2: clickup.com/t/XXXXX
+          if [ -z "$TASK_ID" ]; then
+            TASK_ID=$(echo "$BODY" | grep -oP 'clickup\.com/t/\K[a-z0-9]+' | head -1)
+          fi
+
+          echo "task_id=$TASK_ID" >> $GITHUB_OUTPUT
+
+      - name: Update ClickUp task to complete
+        if: steps.extract.outputs.task_id != ''
+        env:
+          CLICKUP_TOKEN: ${{ secrets.CLICKUP_API_TOKEN }}
+          TASK_ID: ${{ steps.extract.outputs.task_id }}
+        run: |
+          RESPONSE=$(curl -s -X PUT "https://api.clickup.com/api/v2/task/$TASK_ID" \
+            -H "Authorization: $CLICKUP_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "status": "complete",
+              "description": "PR #${{ github.event.pull_request.number }} merged. Task auto-completed by GitHub Actions."
+            }')
+          echo "Response: $RESPONSE"
