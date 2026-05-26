@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CategoryBadge } from "@/components/CategoryBadge";
 import { EmptyState } from "@/components/EmptyState";
 import { PriorityBadge } from "@/components/PriorityBadge";
@@ -9,14 +9,10 @@ import { deleteSavedMessage, getSavedMessages } from "@/lib/localStorage";
 import { CATEGORIES, PRIORITIES, type MessageCategory, type MessagePriority, type SavedMessage } from "@/lib/types";
 
 export function InboxTable() {
-  const [messages, setMessages] = useState<SavedMessage[]>([]);
+  const [messages, setMessages] = useState<SavedMessage[]>(() => getSavedMessages());
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<MessageCategory | "All">("All");
   const [priority, setPriority] = useState<MessagePriority | "All">("All");
-
-  useEffect(() => {
-    setMessages(getSavedMessages());
-  }, []);
 
   function handleDelete(id: string) {
     deleteSavedMessage(id);
